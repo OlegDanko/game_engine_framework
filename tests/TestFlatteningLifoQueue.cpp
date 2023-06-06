@@ -41,6 +41,36 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_two) {
     BOOST_CHECK_EQUAL(queue.observe().get().val, 4);
 }
 
+BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_multiple_observers) {
+    std::hash<std::string> h;
+    FlatteningLifoQueue<TestInt> queue;
+    queue.push({1});
+    auto obs_a_opt = std::make_optional(queue.observe());
+    auto obs_b_opt = std::make_optional(queue.observe());
+    queue.push({3});
+
+    BOOST_CHECK_EQUAL(queue.observe().get().val, 3);
+    obs_a_opt = std::nullopt;
+    BOOST_CHECK_EQUAL(queue.observe().get().val, 3);
+    obs_b_opt = std::nullopt;
+    BOOST_CHECK_EQUAL(queue.observe().get().val, 4);
+}
+
+BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_move_observer) {
+    std::hash<std::string> h;
+    FlatteningLifoQueue<TestInt> queue;
+    queue.push({1});
+    auto obs_a_opt = std::make_optional(queue.observe());
+    auto obs_b_opt = std::move(obs_a_opt);
+    obs_a_opt = std::nullopt;
+
+    queue.push({3});
+    BOOST_CHECK_EQUAL(queue.observe().get().val, 3);
+    obs_b_opt = std::nullopt;
+    BOOST_CHECK_EQUAL(queue.observe().get().val, 4);
+}
+
+
 BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_three) {
     std::hash<std::string> h;
     FlatteningLifoQueue<TestInt> queue;
@@ -64,7 +94,7 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_2_of_3) {
     BOOST_CHECK_EQUAL(queue.observe().get().val, 9);
 }
 
-BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_2_of_3_last) {
+BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_2_of_3_last) {
     std::hash<std::string> h;
     FlatteningLifoQueue<TestInt> queue;
     queue.push({1});
@@ -80,7 +110,7 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_2_of_3_last) {
     BOOST_CHECK_EQUAL(queue.observe().get().val, 9);
 }
 
-BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_1_of_3_last) {
+BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_1_of_3_last) {
     std::hash<std::string> h;
     FlatteningLifoQueue<TestInt> queue;
     queue.push({1});
@@ -96,6 +126,5 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_1_of_3_last) {
     obs_0_opt = std::nullopt;
     BOOST_CHECK_EQUAL(queue.observe().get().val, 9);
 }
-
 
 BOOST_AUTO_TEST_SUITE_END()
