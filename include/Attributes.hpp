@@ -28,10 +28,13 @@ struct AttributeStateFrame {
 
     static AttributeStateFrame spawn(AttributeStateFrame& src) {
         AttributeStateFrame frame;
-
-        auto& src_map = src.attr_holder_map;
         auto& dst_map = frame.attr_ptr_map;
-        for(auto& [id, attr] : src_map) {
+
+        for(auto& [id, attr] : src.attr_ptr_map) {
+            dst_map[id] = attr;
+        }
+
+        for(auto& [id, attr] : src.attr_holder_map) {
             dst_map[id] = attr.get();
         }
 

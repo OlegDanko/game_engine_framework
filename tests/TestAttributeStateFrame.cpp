@@ -52,4 +52,21 @@ BOOST_AUTO_TEST_CASE(AttributeStateFrame_spawn_const) {
     BOOST_CHECK_EQUAL(frame_1.get_attr(1)->var, 2);
 }
 
+BOOST_AUTO_TEST_CASE(AttributeStateFrame_spawn_chain) {
+    struct TestAttr { int var{0}; };
+    using frame_t = AttributeStateFrame_DefGen<TestAttr>;
+
+    frame_t frame_0;
+    frame_0.get_attr(1)->var = 1;
+
+    auto frame_1 = frame_t::spawn(frame_0);
+    const auto frame_2 = frame_t::spawn(frame_1);
+
+    BOOST_CHECK_EQUAL(frame_2.get_attr(1)->var, 1);
+
+    // Non-functional requirement - frame_2.get_attr() points to the value in frame_0
+    frame_0.get_attr(1)->var = 2;
+    BOOST_CHECK_EQUAL(frame_2.get_attr(1)->var, 2);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
