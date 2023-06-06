@@ -9,7 +9,7 @@ struct AttributeGeneratorDefault {
     static attr_holder_t gen_attribure() {
         return std::make_unique<ATTR_T>();
     }
-    static attr_holder_t gen_attribure(attr_ptr_t attr) {
+    static attr_holder_t cpy_attribure(attr_ptr_t attr) {
         auto attr_ret = std::make_unique<ATTR_T>();
         *attr_ret = *attr;
         return attr_ret;

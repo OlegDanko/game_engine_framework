@@ -34,20 +34,31 @@ struct AttributeStateFrame {
     std::unordered_map<size_t, attr_holder_t> attr_holder_map;
     std::unordered_map<size_t, attr_ptr_t> attr_ptr_map;
 
-    attr_ptr_t get_attr(size_t id) {
-        if(attr_holder_map.find(id) == attr_holder_map.end()) {
-            // copy existing attribute if present
-            if(auto it = attr_ptr_map.find(id); attr_ptr_map.end() != it) {
-                attr_holder_map[id] = ATTR_GEN_T::gen_attribure(it->second);
-                attr_ptr_map.erase(it);
-                return attr_holder_map[id].get();
-            }
-            // create new attribute
-            attr_holder_map[id] = ATTR_GEN_T::gen_attribure();
+    attr_ptr_t gen_attr(size_t id) {
+        if(attr_holder_map.find(id) != attr_holder_map.end()
+            || attr_ptr_map.find(id) != attr_ptr_map.end()) {
+            return nullptr;
         }
+
+        attr_holder_map[id] = ATTR_GEN_T::gen_attribure();
         return attr_holder_map[id].get();
     }
-    const attr_ptr_t get_attr(size_t id) const {
+
+    attr_ptr_t get_attr(size_t id) {
+        if(auto it = attr_holder_map.find(id); attr_holder_map.end() != it) {
+            return it->second.get();
+        }
+
+        auto it = attr_ptr_map.find(id);
+        if(attr_ptr_map.end() == it) {
+            return nullptr;
+        }
+        attr_holder_map[id] = ATTR_GEN_T::cpy_attribure(it->second);
+        attr_ptr_map.erase(it);
+
+        return attr_holder_map[id].get();
+    }
+    const attr_ptr_t read_attr(size_t id) const {
         if(auto it = attr_holder_map.find(id); attr_holder_map.end() != it) {
             return it->second.get();
         }
