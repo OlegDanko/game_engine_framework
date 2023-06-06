@@ -20,6 +20,8 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push) {
     FlatteningLifoQueue<TestInt> queue;
     queue.push({1});
     BOOST_CHECK_EQUAL(queue.observe().get().val, 1);
+    const auto observer_c = queue.observe();
+    BOOST_CHECK_EQUAL(observer_c.get().val, 1);
 }
 
 BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_several) {

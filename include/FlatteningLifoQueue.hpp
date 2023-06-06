@@ -45,6 +45,9 @@ struct FlatteningLifoQueue {
         T& get() {
             return node->val;
         }
+        const T& get() const {
+            return node->val;
+        }
         Observer(Node* n) : node(n) {
             ++(node->observers);
         }
