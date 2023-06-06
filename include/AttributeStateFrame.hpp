@@ -1,25 +1,6 @@
 #pragma once
+
 #include <unordered_map>
-#include <memory>
-
-
-struct AttributePosition {
-    float x, y, z;
-};
-
-template<typename ATTR_T>
-struct AttributeGeneratorDefault {
-    using attr_holder_t = std::unique_ptr<ATTR_T>;
-    using attr_ptr_t = ATTR_T*;
-    static attr_holder_t gen_attribure() {
-        return std::make_unique<ATTR_T>();
-    }
-    static attr_holder_t gen_attribure(attr_ptr_t attr) {
-        auto attr_ret = std::make_unique<ATTR_T>();
-        *attr_ret = *attr;
-        return attr_ret;
-    }
-};
 
 template<typename ATTR_GEN_T>
 struct AttributeStateFrame {
@@ -28,14 +9,10 @@ struct AttributeStateFrame {
 
     static AttributeStateFrame spawn(AttributeStateFrame& src) {
         AttributeStateFrame frame;
-        auto& dst_map = frame.attr_ptr_map;
-
-        for(auto& [id, attr] : src.attr_ptr_map) {
-            dst_map[id] = attr;
-        }
+        frame.attr_ptr_map = src.attr_ptr_map;
 
         for(auto& [id, attr] : src.attr_holder_map) {
-            dst_map[id] = attr.get();
+            frame.attr_ptr_map[id] = attr.get();
         }
 
         return frame;
@@ -80,6 +57,3 @@ struct AttributeStateFrame {
         return nullptr;
     }
 };
-
-template<typename ATTR_T>
-using AttributeStateFrame_DefGen = AttributeStateFrame<AttributeGeneratorDefault<ATTR_T>>;
