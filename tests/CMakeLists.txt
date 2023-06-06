@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 file(GLOB TEST_SRC
     TestAttributeStateFrame.cpp
     TestFlatteningLifoQueue.cpp
+    TestAttributeStateQueue.cpp
 )
 
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)

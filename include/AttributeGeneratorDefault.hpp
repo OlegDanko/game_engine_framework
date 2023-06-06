@@ -18,6 +18,10 @@ struct AttributeGeneratorDefault {
 
 template<typename ATTR_GEN_T>
 struct AttributeStateFrame;
-
 template<typename ATTR_T>
 using AttributeStateFrame_DefGen = AttributeStateFrame<AttributeGeneratorDefault<ATTR_T>>;
+
+template<typename ATTR_GEN_T>
+struct AttributeStateQueue;
+template<typename ATTR_T>
+using AttributeStateQueue_DefGen = AttributeStateQueue<AttributeGeneratorDefault<ATTR_T>>;
