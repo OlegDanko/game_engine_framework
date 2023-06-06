@@ -26,6 +26,13 @@ BOOST_AUTO_TEST_CASE(AttributeStateFrame_get_attr_const_cast) {
     BOOST_CHECK_EQUAL(frame_const.get_attr(1)->var, 1);
 }
 
+BOOST_AUTO_TEST_CASE(AttributeStateFrame_get_attr_const_cast_nullptr) {
+    struct TestAttr { int var{0}; };
+    AttributeStateFrame_DefGen<TestAttr> frame;
+    const auto& frame_const = frame;
+    BOOST_CHECK_EQUAL(frame_const.get_attr(1), nullptr);
+}
+
 BOOST_AUTO_TEST_CASE(AttributeStateFrame_spawn) {
     struct TestAttr { int var{0}; };
     using frame_t = AttributeStateFrame_DefGen<TestAttr>;
