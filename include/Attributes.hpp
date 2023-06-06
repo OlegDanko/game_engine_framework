@@ -30,9 +30,9 @@ struct AttributeStateFrame {
         AttributeStateFrame frame;
 
         auto& src_map = src.attr_holder_map;
-        auto& dst_map = frame.attr_holder_map;
+        auto& dst_map = frame.attr_ptr_map;
         for(auto& [id, attr] : src_map) {
-            dst_map[id] = ATTR_GEN_T::gen_attribure(attr.get());
+            dst_map[id] = attr.get();
         }
 
         return frame;
@@ -40,12 +40,25 @@ struct AttributeStateFrame {
 
     // holds attributes created or updated during the current frame
     std::unordered_map<size_t, attr_holder_t> attr_holder_map;
+    std::unordered_map<size_t, attr_ptr_t> attr_ptr_map;
 
     attr_ptr_t get_attr(size_t id) {
         if(attr_holder_map.find(id) == attr_holder_map.end()) {
+            // copy existing attribute if present
+            if(auto it = attr_ptr_map.find(id); attr_ptr_map.end() != it) {
+                attr_holder_map[id] = ATTR_GEN_T::gen_attribure(it->second);
+                return attr_holder_map[id].get();
+            }
+            // create new attribute
             attr_holder_map[id] = ATTR_GEN_T::gen_attribure();
         }
         return attr_holder_map[id].get();
+    }
+    const attr_ptr_t get_attr(size_t id) const {
+        if(auto it = attr_ptr_map.find(id); attr_ptr_map.end() != it) {
+            return it->second;
+        }
+        return nullptr;
     }
 };
 
