@@ -16,6 +16,16 @@ BOOST_AUTO_TEST_CASE(AttributeStateFrame_get_attr) {
     BOOST_CHECK_EQUAL(frame.get_attr(1)->var, 1);
 }
 
+BOOST_AUTO_TEST_CASE(AttributeStateFrame_get_attr_const_cast) {
+    struct TestAttr { int var{0}; };
+    AttributeStateFrame_DefGen<TestAttr> frame;
+
+    frame.get_attr(1)->var = 1;
+
+    const auto& frame_const = frame;
+    BOOST_CHECK_EQUAL(frame_const.get_attr(1)->var, 1);
+}
+
 BOOST_AUTO_TEST_CASE(AttributeStateFrame_spawn) {
     struct TestAttr { int var{0}; };
     using frame_t = AttributeStateFrame_DefGen<TestAttr>;
@@ -82,6 +92,36 @@ BOOST_AUTO_TEST_CASE(AttributeStateFrame_spawn_const_chain_mod) {
 
     // frame_2.get_attr() points to the value modified in frame_1
     BOOST_CHECK_EQUAL(frame_2.get_attr(1)->var, 2);
+}
+
+BOOST_AUTO_TEST_CASE(AttributeStateFrame_merge) {
+    struct TestAttr { int var{0}; };
+    using frame_t = AttributeStateFrame_DefGen<TestAttr>;
+    auto frame_0 = std::make_unique<frame_t>();
+    frame_0->get_attr(1)->var = 1;
+
+    auto frame_1 = std::make_unique<frame_t>(std::move(frame_t::spawn(*frame_0)));
+    frame_0->get_attr(1)->var = 2;
+
+    frame_t::merge(*frame_1, *frame_0);
+    frame_0 = nullptr;
+
+    BOOST_CHECK_EQUAL(frame_1->get_attr(1)->var, 2);
+}
+
+BOOST_AUTO_TEST_CASE(AttributeStateFrame_merge_mod) {
+    struct TestAttr { int var{0}; };
+    using frame_t = AttributeStateFrame_DefGen<TestAttr>;
+    auto frame_0 = std::make_unique<frame_t>();
+    frame_0->get_attr(1)->var = 1;
+
+    auto frame_1 = std::make_unique<frame_t>(std::move(frame_t::spawn(*frame_0)));
+    frame_1->get_attr(1)->var = 2;
+
+    frame_t::merge(*frame_1, *frame_0);
+    frame_0 = nullptr;
+
+    BOOST_CHECK_EQUAL(frame_1->get_attr(1)->var, 2);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
