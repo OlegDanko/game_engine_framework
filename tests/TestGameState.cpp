@@ -23,7 +23,6 @@ BOOST_AUTO_TEST_CASE(GameState_case) {
         BOOST_CHECK_EQUAL(*attr_ptr, 2);
     }
 
-
     auto queue_f_d = game_state.get_queues<float, double>();
 
     *get<float>(queue_f_d).get_gen_frame().gen_attr(2) = 10.0f;
@@ -51,5 +50,54 @@ BOOST_AUTO_TEST_CASE(GameState_case) {
         BOOST_CHECK_EQUAL(*attr_d_ptr, 200.0);
     }
 }
+BOOST_AUTO_TEST_CASE(GameStateAccess_single_attr) {
+    GameState<int> game_state;
+    size_t id;
+    if(auto frame = game_state.generator.get_frame(); true) {
+        auto go = frame.gen_game_object<int>();
+        id = go.get_id();
+        go.get_attr<int>() = 1;
+    }
+    auto access_1 = game_state.get_access<types<int>, types<>>();
+    if(auto frame = access_1.get_frame(); true) {
+        auto go = frame.get_game_object(id);
+        BOOST_CHECK_EQUAL(*go.get_attr<int>(), 1);
+        *go.get_attr<int>() = 2;
+    }
+    auto access_2 = game_state.get_access<types<>, types<int>>();
+    if(auto frame = access_2.get_frame(); true) {
+        auto go = frame.get_game_object(id);
+        BOOST_CHECK_EQUAL(*go.read_attr<int>(), 2);
+    }
+}
+BOOST_AUTO_TEST_CASE(GameStateAccess_multiple_attrs) {
+    GameState<int, float> game_state;
+    size_t id;
+    if(auto frame = game_state.generator.get_frame(); true) {
+        auto go = frame.gen_game_object<int, float>();
+        id = go.get_id();
+        go.get_attr<int>() = 1;
+        go.get_attr<float>() = 10.0f;
+    }
+    auto access_i = game_state.get_access<types<int>, types<float>>();
+    if(auto frame = access_i.get_frame(); true) {
+        auto go = frame.get_game_object(id);
+        BOOST_CHECK_EQUAL(*go.read_attr<float>(), 10.0f);
+        *go.get_attr<int>() = 2;
+    }
+    auto access_f = game_state.get_access<types<float>, types<int>>();
+    if(auto frame = access_f.get_frame(); true) {
+        auto go = frame.get_game_object(id);
+        BOOST_CHECK_EQUAL(*go.read_attr<int>(), 2);
+        *go.get_attr<float>() = 20.0f;
+    }
+    auto access_read = game_state.get_access<types<>, types<int, float>>();
+    if(auto frame = access_read.get_frame(); true) {
+        auto go = frame.get_game_object(id);
+        BOOST_CHECK_EQUAL(*go.read_attr<float>(), 20.0f);
+        BOOST_CHECK_EQUAL(*go.read_attr<int>(), 2);
+    }
+}
 
 BOOST_AUTO_TEST_SUITE_END()
+

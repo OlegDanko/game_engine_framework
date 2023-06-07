@@ -25,4 +25,7 @@ public:
     T& get() {
         return val;
     }
+    const T& get() const {
+        return val;
+    }
 };

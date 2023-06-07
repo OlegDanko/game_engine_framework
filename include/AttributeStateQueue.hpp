@@ -81,7 +81,7 @@ struct AttributeStateQueue {
     ModFrame get_mod_frame() {
         return ModFrame{*this, create_mod_frame()};
     }
-    ReadFrame get_read_frame() {
+    ReadFrame get_read_frame() const {
         return ReadFrame{queue.lock().get().observe()};
     }
 };

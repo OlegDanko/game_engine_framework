@@ -9,7 +9,7 @@ struct FlatteningLifoQueue {
     struct Node {
         Node *next {nullptr};
         std::unique_ptr<Node> prev{nullptr};
-        size_t observers{0};
+        mutable size_t observers{0};
         T val;
 
         static void exclude(Node* node) {
@@ -77,6 +77,9 @@ struct FlatteningLifoQueue {
         Node::flatten_chain(top.get());
     }
     Observer observe() {
+        return {top.get()};
+    }
+    const Observer observe() const {
         return {top.get()};
     }
 };

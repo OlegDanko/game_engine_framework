@@ -6,6 +6,9 @@
 template<typename ...Ts>
 struct type_chain;
 
+template<>
+struct type_chain<> {};
+
 template<typename T>
 struct type_chain<T> {
     using val_t = T;
@@ -28,9 +31,11 @@ T& get(type_chain<Ts...>& tc) {
     }
 }
 
-
 template<template<typename> typename TT, typename ...Ts>
 struct tmpl_type_chain;
+
+template<template<typename> typename TT>
+struct tmpl_type_chain<TT> {};
 
 template<template<typename> typename TT, typename T>
 struct tmpl_type_chain<TT, T> {
@@ -54,10 +59,17 @@ TT<T>& get(tmpl_type_chain<TT, Ts...>& tc) {
         return get<T>(tc.sub_chain);
     }
 }
+template<typename T, template<typename> typename TT, typename ...Ts>
+const TT<T>& get(const tmpl_type_chain<TT, Ts...>& tc) {
+    if constexpr(std::is_same_v<typename tmpl_type_chain<TT, Ts...>::param_t, T>) {
+        return tc.val;
+    } else {
+        return get<T>(tc.sub_chain);
+    }
+}
 
 template<template<typename> typename TT, typename ...Ts>
 struct tmpl_type_chain_maker;
-
 template<template<typename> typename TT, typename T>
 struct tmpl_type_chain_maker<TT, T> {
     static tmpl_type_chain<TT, T> make(TT<T>&& val) {
@@ -72,6 +84,10 @@ struct tmpl_type_chain_maker<TT, T, Ts...> {
                                              std::forward<TT<T>>(val));
     }
 };
+template<template<typename> typename TT>
+tmpl_type_chain<TT> make_tmpl_type_chain() {
+    return {};
+}
 
 template<template<typename> typename TT, typename ... Ts>
 tmpl_type_chain<TT, Ts...> make_tmpl_type_chain(TT<Ts>&& ... vals) {

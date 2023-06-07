@@ -18,7 +18,16 @@ template<typename ...Ts>
 constexpr bool is_type_present_v = is_type_present<Ts...>::val;
 
 template<typename ...Ts>
-struct types {};
+struct types {
+    constexpr static bool none = false;
+};
+
+
+template<>
+struct types<> {
+    constexpr static bool none = true;
+};
+
 
 template<typename, typename>
 struct types_intersect;
