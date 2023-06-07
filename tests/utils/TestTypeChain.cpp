@@ -3,6 +3,19 @@
 
 BOOST_AUTO_TEST_SUITE(TypeChainTests)
 
+BOOST_AUTO_TEST_CASE(TypeChain_is_type_present) {
+    bool v = is_type_present_v<int, int>;
+    BOOST_CHECK_EQUAL(v, true);
+    v = is_type_present_v<int, float>;
+    BOOST_CHECK_EQUAL(v, false);
+    v = is_type_present_v<int, int, float>;
+    BOOST_CHECK_EQUAL(v, true);
+    v = is_type_present_v<int, float, int>;
+    BOOST_CHECK_EQUAL(v, true);
+    v = is_type_present_v<int, float, double>;
+    BOOST_CHECK_EQUAL(v, false);
+}
+
 BOOST_AUTO_TEST_CASE(TypeChain_get) {
     type_chain<int, float, double> tc;
 

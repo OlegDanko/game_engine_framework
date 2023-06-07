@@ -10,13 +10,13 @@ class Locked {
 public:
     template <typename U = T>
     Locked(T v, std::unique_lock<std::mutex> l,
-           typename std::enable_if<std::is_object_v<U>>::type* = nullptr)
+           std::enable_if_t<std::is_object_v<U>>* = nullptr)
         : val(std::move(v))
         , lk(std::move(l)) {}
 
     template <typename U = T>
     Locked(T v, std::unique_lock<std::mutex> l,
-           typename std::enable_if<std::is_lvalue_reference_v<U>>::type* = nullptr)
+           std::enable_if_t<std::is_lvalue_reference_v<U>>* = nullptr)
         : val(v)
         , lk(std::move(l)) {}
 
