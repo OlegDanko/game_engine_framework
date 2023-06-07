@@ -9,6 +9,7 @@ file(GLOB TEST_SRC
     TestAttributeStateFrame.cpp
     TestFlatteningLifoQueue.cpp
     TestAttributeStateQueue.cpp
+    TestGameState.cpp
     utils/TestTypeChain.cpp
 )
 

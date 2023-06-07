@@ -20,6 +20,8 @@ public:
         : val(v)
         , lk(std::move(l)) {}
 
+    Locked(Locked&&) = default;
+
     T& get() {
         return val;
     }
