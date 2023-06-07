@@ -1,21 +1,6 @@
-#pragma once
-#include <type_traits>
+﻿#pragma once
 #include <memory>
-
-template<typename ...Ts>
-struct is_type_present;
-
-template<typename T, typename U>
-struct is_type_present<T, U> {
-    constexpr static bool val = std::is_same_v<T, U>;
-};
-template<typename T, typename U, typename ...Ts>
-struct is_type_present<T, U, Ts...> {
-    constexpr static bool val = std::is_same_v<T, U> | is_type_present<T, Ts...>::val;
-};
-
-template<typename ...Ts>
-constexpr bool is_type_present_v = is_type_present<Ts...>::val;
+#include "TypeUtils.hpp"
 
 
 template<typename ...Ts>
@@ -75,25 +60,22 @@ struct tmpl_type_chain_maker;
 
 template<template<typename> typename TT, typename T>
 struct tmpl_type_chain_maker<TT, T> {
-    static tmpl_type_chain<TT, T> make(TT<T> val) {
-        return {std::move(val)};
+    static tmpl_type_chain<TT, T> make(TT<T>&& val) {
+        return {std::forward<TT<T>>(val)};
     }
 };
 template<template<typename> typename TT, typename T, typename ... Ts>
 struct tmpl_type_chain_maker<TT, T, Ts...> {
-    static tmpl_type_chain<TT, T, Ts...> make(TT<T> val, tmpl_type_chain<TT, Ts...> sub_chain) {
-        return {std::move(sub_chain), std::move(val)};
-    }
-    static tmpl_type_chain<TT, T, Ts...> make(TT<T> val, TT<Ts>... vals) {
-        auto sub_chain = tmpl_type_chain_maker<TT, Ts...>().make(std::move(vals)...);
+    static tmpl_type_chain<TT, T, Ts...> make(TT<T>&& val, TT<Ts>&&... vals) {
+        auto sub_chain = tmpl_type_chain_maker<TT, Ts...>().make(std::forward<TT<Ts>>(vals)...);
         return tmpl_type_chain<TT, T, Ts...>(std::move(sub_chain),
-                                             std::move(val));
+                                             std::forward<TT<T>>(val));
     }
 };
 
 template<template<typename> typename TT, typename ... Ts>
-tmpl_type_chain<TT, Ts...> make_tmpl_type_chain(TT<Ts> ... vals) {
-    return tmpl_type_chain_maker<TT, Ts...>::make(std::move(vals)...);
+tmpl_type_chain<TT, Ts...> make_tmpl_type_chain(TT<Ts>&& ... vals) {
+    return tmpl_type_chain_maker<TT, Ts...>::make(std::forward<TT<Ts>>(vals)...);
 }
 
 
