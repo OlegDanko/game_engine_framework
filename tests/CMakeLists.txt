@@ -9,6 +9,7 @@ file(GLOB TEST_SRC
     TestAttributeStateFrame.cpp
     TestFlatteningLifoQueue.cpp
     TestAttributeStateQueue.cpp
+    utils/TestTypeChain.cpp
 )
 
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
