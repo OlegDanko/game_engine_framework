@@ -1,5 +1,6 @@
 #pragma once
 #include <type_traits>
+#include <memory>
 
 template<typename ...Ts>
 struct is_type_present;
@@ -68,3 +69,31 @@ TT<T>& get(tmpl_type_chain<TT, Ts...>& tc) {
         return get<T>(tc.sub_chain);
     }
 }
+
+template<template<typename> typename TT, typename ...Ts>
+struct tmpl_type_chain_maker;
+
+template<template<typename> typename TT, typename T>
+struct tmpl_type_chain_maker<TT, T> {
+    static tmpl_type_chain<TT, T> make(TT<T> val) {
+        return {std::move(val)};
+    }
+};
+template<template<typename> typename TT, typename T, typename ... Ts>
+struct tmpl_type_chain_maker<TT, T, Ts...> {
+    static tmpl_type_chain<TT, T, Ts...> make(TT<T> val, tmpl_type_chain<TT, Ts...> sub_chain) {
+        return {std::move(sub_chain), std::move(val)};
+    }
+    static tmpl_type_chain<TT, T, Ts...> make(TT<T> val, TT<Ts>... vals) {
+        auto sub_chain = tmpl_type_chain_maker<TT, Ts...>().make(std::move(vals)...);
+        return tmpl_type_chain<TT, T, Ts...>(std::move(sub_chain),
+                                             std::move(val));
+    }
+};
+
+template<template<typename> typename TT, typename ... Ts>
+tmpl_type_chain<TT, Ts...> make_tmpl_type_chain(TT<Ts> ... vals) {
+    return tmpl_type_chain_maker<TT, Ts...>::make(std::move(vals)...);
+}
+
+
