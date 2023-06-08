@@ -13,7 +13,7 @@ file(GLOB TEST_SRC
     utils/TestTypeChain.cpp
     utils/TestTypeUtils.cpp
     events/TestEventTicket.cpp
-#    events/TestEventSource.cpp
+    events/TestEventSource.cpp
 )
 
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
