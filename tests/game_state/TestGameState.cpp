@@ -1,5 +1,5 @@
 #include <boost/test/unit_test.hpp>
-#include <GameState.hpp>
+#include <game_state/GameState.hpp>
 
 BOOST_AUTO_TEST_SUITE(GameStateTests)
 

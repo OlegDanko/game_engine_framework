@@ -1,8 +1,9 @@
 #pragma once
 
-#include "FlatteningLifoQueue.hpp"
 #include "AttributeStateFrame.hpp"
-#include "utils/Protected.hpp"
+
+#include <FlatteningLifoQueue.hpp>
+#include <utils/Protected.hpp>
 
 template<typename T>
 struct flattener<AttributeStateFrame<T>> {

@@ -1,6 +1,6 @@
 #include <boost/test/unit_test.hpp>
-#include <AttributeStateQueue.hpp>
-#include <AttributeGeneratorDefault.hpp>
+#include <game_state/AttributeStateQueue.hpp>
+#include <game_state/AttributeGeneratorDefault.hpp>
 #include <thread>
 #include <atomic>
 #include <ranges>

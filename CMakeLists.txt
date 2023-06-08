@@ -9,6 +9,8 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)
 
 add_executable(game_engine main.cpp)
 
+target_include_directories(game_engine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
+
 install(TARGETS game_engine
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

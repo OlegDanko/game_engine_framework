@@ -1,6 +1,6 @@
 #include <boost/test/unit_test.hpp>
-#include <AttributeStateFrame.hpp>
-#include <AttributeGeneratorDefault.hpp>
+#include <game_state/AttributeStateFrame.hpp>
+#include <game_state/AttributeGeneratorDefault.hpp>
 
 BOOST_AUTO_TEST_SUITE(AttributeStateFrameTests)
 
