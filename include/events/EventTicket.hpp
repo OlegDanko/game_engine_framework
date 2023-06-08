@@ -1,0 +1,30 @@
+#pragma once
+
+#include <cstdint>
+
+struct ITicketClosedListener {
+    virtual void on_ticket_closed(std::size_t id) = 0;
+};
+
+struct IEventTicket {
+    virtual std::size_t get_id() = 0;
+};
+struct EventTicket : IEventTicket {
+    std::size_t id;
+    ITicketClosedListener& l;
+
+    EventTicket(const EventTicket&) = delete;
+    EventTicket(EventTicket&&) = delete;
+    void operator=(const EventTicket&) = delete;
+    void operator=(EventTicket&&) = delete;
+
+    EventTicket(std::size_t id, ITicketClosedListener& listener)
+        : id(id)
+        , l(listener) {}
+    ~EventTicket() {
+        l.on_ticket_closed(id);
+    }
+    std::size_t get_id() override {
+        return id;
+    }
+};

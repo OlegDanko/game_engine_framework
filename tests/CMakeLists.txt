@@ -12,7 +12,7 @@ file(GLOB TEST_SRC
     game_state/TestGameState.cpp
     utils/TestTypeChain.cpp
     utils/TestTypeUtils.cpp
-#    events/TestEventTicket.cpp
+    events/TestEventTicket.cpp
 #    events/TestEventSource.cpp
 )
 
