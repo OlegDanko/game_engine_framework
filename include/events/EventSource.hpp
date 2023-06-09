@@ -8,7 +8,7 @@
 #include <functional>
 
 template<typename ...Ts>
-struct EventSource : ITicketClosedListener, IEventApplier<Ts...> {
+class EventSource : public ITicketClosedListener, IEventApplier<Ts...> {
     std::unordered_map<size_t, std::tuple<Ts...>> events;
     size_t id;
     IEventTicketCourier& courier;
@@ -16,7 +16,7 @@ struct EventSource : ITicketClosedListener, IEventApplier<Ts...> {
     const ITicketClosedListener* as_ticket_closed_listener() const {
         return this;
     }
-
+public:
     EventSource(size_t id, IEventTicketCourier& c)
         : id(id)
         , courier(c) {}
@@ -33,7 +33,7 @@ struct EventSource : ITicketClosedListener, IEventApplier<Ts...> {
         }
     }
 
-    size_t get_id() const {
+    size_t get_id() const override {
         return id;
     }
 
@@ -49,3 +49,10 @@ struct EventSource : ITicketClosedListener, IEventApplier<Ts...> {
         courier.register_receiver(id, recv);
     }
 };
+
+size_t next_event_id();
+
+template<typename ...Ts>
+EventSource<Ts...> make_event_source(IEventTicketCourier& c) {
+    return {next_event_id(), c};
+}

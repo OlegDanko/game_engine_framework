@@ -7,8 +7,15 @@ struct AttributeStateFrame {
     using attr_holder_t = typename ATTR_GEN_T::attr_holder_t;
     using attr_ptr_t = typename ATTR_GEN_T::attr_ptr_t;
 
-    static AttributeStateFrame spawn(AttributeStateFrame& src) {
-        AttributeStateFrame frame;
+    size_t frame_id{0};
+    // holds attributes created or updated during the current frame
+    std::unordered_map<size_t, attr_holder_t> attr_holder_map;
+    std::unordered_map<size_t, attr_ptr_t> attr_ptr_map;
+
+
+    static AttributeStateFrame spawn(const AttributeStateFrame& src) {
+        AttributeStateFrame frame{.frame_id = src.frame_id + 1};
+
         frame.attr_ptr_map = src.attr_ptr_map;
 
         for(auto& [id, attr] : src.attr_holder_map) {
@@ -29,10 +36,6 @@ struct AttributeStateFrame {
             dst.attr_holder_map[id] = std::move(attr);
         }
     }
-
-    // holds attributes created or updated during the current frame
-    std::unordered_map<size_t, attr_holder_t> attr_holder_map;
-    std::unordered_map<size_t, attr_ptr_t> attr_ptr_map;
 
     attr_ptr_t gen_attr(size_t id) {
         if(attr_holder_map.find(id) != attr_holder_map.end()
@@ -67,4 +70,6 @@ struct AttributeStateFrame {
         }
         return nullptr;
     }
+
+    size_t get_id() const { return frame_id; }
 };

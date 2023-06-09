@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(game_engine LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)
@@ -11,6 +11,7 @@ file(GLOB SRC
     include/events/EventTicket.cpp
     include/events/EventReceiver.cpp
     include/events/EventTicketCourier.cpp
+    include/events/EventSource.cpp
 )
 
 add_library(game_engine_lib STATIC ${SRC})

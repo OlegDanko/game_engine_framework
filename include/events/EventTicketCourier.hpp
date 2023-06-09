@@ -5,8 +5,7 @@
 #include <unordered_set>
 
 #include "IEventTicketCourier.hpp"
-
-struct IEventTicketFrame;
+#include "IEventTicketReceiver.hpp"
 
 class EventTicketCourier : public IEventTicketCourier {
     std::unordered_set<IEventTicketReceiver*> receivers;

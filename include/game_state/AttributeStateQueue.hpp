@@ -37,6 +37,10 @@ struct AttributeStateQueue {
     struct GenFrame {
         AttributeStateQueue& parent;
         locked_frame_t frame_lkd;
+        size_t get_id() const {
+            return frame_lkd.get().get_id();
+        }
+
         attr_ptr_t gen_attr(size_t id) {
             return frame_lkd.get().gen_attr(id);
         }
@@ -51,6 +55,9 @@ struct AttributeStateQueue {
     struct ModFrame {
         AttributeStateQueue& parent;
         locked_frame_t frame_lkd;
+        size_t get_id() const {
+            return frame_lkd.get().get_id();
+        }
         attr_ptr_t get_attr(size_t id) {
             return frame_lkd.get().get_attr(id);
         }
@@ -64,10 +71,14 @@ struct AttributeStateQueue {
     };
     struct ReadFrame {
         frame_observer_t frame_obs;
+        size_t get_id() const {
+            return frame_obs.get().get_id();
+        }
         ReadFrame(frame_observer_t frame_obs)
             : frame_obs(std::move(frame_obs)) {}
         ReadFrame(ReadFrame&&) = default;
         const attr_ptr_t read_attr(size_t id) const {
+            get_id();
             return frame_obs.get().read_attr(id);
         }
     };

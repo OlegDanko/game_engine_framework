@@ -7,7 +7,7 @@ template<typename T>
 using gen_frame_t = typename AttributeStateQueue_DefGen<T>::GenFrame;
 
 BOOST_AUTO_TEST_CASE(GameState_case) {
-    GameState<int, float, double> game_state;
+    GameState_defs<int, float, double>::GameState game_state;
 
     auto queue_int = game_state.get_queues<int>();
 
@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(GameState_case) {
     }
 }
 BOOST_AUTO_TEST_CASE(GameStateAccess_single_attr) {
-    GameState<int> game_state;
+    GameState_defs<int, float, double>::GameState game_state;
     size_t id;
     if(auto frame = game_state.generator.get_frame(); true) {
         auto go = frame.gen_game_object<int>();
@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_CASE(GameStateAccess_single_attr) {
     }
 }
 BOOST_AUTO_TEST_CASE(GameStateAccess_multiple_attrs) {
-    GameState<int, float> game_state;
+    GameState_defs<int, float, double>::GameState game_state;
     size_t id;
     if(auto frame = game_state.generator.get_frame(); true) {
         auto go = frame.gen_game_object<int, float>();
