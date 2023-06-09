@@ -10,10 +10,12 @@ struct IEventTicketReceiver;
 
 struct IEventTicketRecvRegistry {
     virtual void register_receiver(size_t src_id, IEventTicketReceiver* recv) = 0;
+    virtual ~IEventTicketRecvRegistry() = default;
 };
 
 struct IEventTicketCourier : IEventTicketRecvRegistry {
     virtual void on_ticket(size_t src_id, std::shared_ptr<IEventTicket> ticket) = 0;
+    virtual ~IEventTicketCourier() = default;
 };
 
 struct EventSourceBase {
@@ -22,12 +24,14 @@ struct EventSourceBase {
     EventSourceBase(size_t id, IEventTicketCourier& c)
         : id(id)
         , courier(c) {}
+    virtual ~EventSourceBase() = default;
 };
 
 template<typename ...Ts>
 struct IEventApplier {
     virtual void apply(size_t event_id, std::function<void(Ts&...)> fn) = 0;
     virtual IEventTicketRecvRegistry& get_receiver_registry() = 0;
+    virtual ~IEventApplier() = default;
 };
 
 template<typename ...Ts>
