@@ -8,20 +8,17 @@
 
 struct IEventTicketReceiver;
 
-struct IEventTicketRecvRegistry {
+struct IEventTicketCourier {
     virtual void register_receiver(size_t src_id, IEventTicketReceiver* recv) = 0;
-    virtual ~IEventTicketRecvRegistry() = default;
-};
-
-struct IEventTicketCourier : IEventTicketRecvRegistry {
     virtual void on_ticket(size_t src_id, std::shared_ptr<IEventTicket> ticket) = 0;
     virtual ~IEventTicketCourier() = default;
 };
 
 template<typename ...Ts>
 struct IEventApplier {
-    virtual void apply(IEventTicket& ticket, std::function<void(Ts&...)> fn) = 0;
-    virtual IEventTicketRecvRegistry& get_receiver_registry() = 0;
+    virtual size_t get_id() const = 0;
+    virtual void apply(IEventTicket& ticket, std::function<void(const Ts&...)> fn) = 0;
+    virtual void register_receiver(IEventTicketReceiver*) = 0;
     virtual ~IEventApplier() = default;
 };
 
@@ -51,7 +48,11 @@ struct EventSource : ITicketClosedListener, IEventApplier<Ts...> {
         }
     }
 
-    void apply(IEventTicket& ticket, std::function<void(Ts&...)> fn) override {
+    size_t get_id() const {
+        return id;
+    }
+
+    void apply(IEventTicket& ticket, std::function<void(const Ts&...)> fn) override {
         if(ticket.get_listener_ptr() != as_ticket_closed_listener())
             return;
 
@@ -59,7 +60,7 @@ struct EventSource : ITicketClosedListener, IEventApplier<Ts...> {
             std::apply(fn, it->second);
         }
     }
-    IEventTicketRecvRegistry& get_receiver_registry() override {
-        return courier;
+    void register_receiver(IEventTicketReceiver* recv) override {
+        courier.register_receiver(id, recv);
     }
 };

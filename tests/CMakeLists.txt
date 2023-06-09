@@ -15,6 +15,7 @@ file(GLOB TEST_SRC
     events/TestEventTicket.cpp
     events/TestEventSource.cpp
     events/TestEventTicketCourier.cpp
+    events/TestEventReceiver.cpp
 )
 
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)

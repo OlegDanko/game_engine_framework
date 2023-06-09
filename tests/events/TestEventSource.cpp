@@ -13,7 +13,6 @@ BOOST_AUTO_TEST_CASE(EventSource_case) {
     Mock<IEventTicket> ticket_mock;
 
     EventSource<int, double> src(123, courier_mock.get());
-    BOOST_CHECK_EQUAL(&src.get_receiver_registry(), &courier_mock.get());
 
     // Save the ticket when an event is created
     std::shared_ptr<IEventTicket> ticket;
@@ -71,6 +70,11 @@ BOOST_AUTO_TEST_CASE(EventSource_case) {
     When(Method(ticket_mock, get_listener_ptr)).Return(listener_ptr);
     src.apply(ticket_mock.get(), apply_fn);
     BOOST_CHECK(!applied);
+}
+
+
+BOOST_AUTO_TEST_CASE(EventSource_register_receiver) {
+
 }
 
 BOOST_AUTO_TEST_SUITE_END()
