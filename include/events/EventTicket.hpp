@@ -9,6 +9,7 @@ struct ITicketClosedListener {
 
 struct IEventTicket {
     virtual std::size_t get_id() = 0;
+    virtual const ITicketClosedListener* get_listener_ptr() const = 0;
     virtual ~IEventTicket() = default;
 };
 struct EventTicket : IEventTicket {
@@ -28,5 +29,8 @@ struct EventTicket : IEventTicket {
     }
     std::size_t get_id() override {
         return id;
+    }
+    const ITicketClosedListener* get_listener_ptr() const override {
+        return &l;
     }
 };

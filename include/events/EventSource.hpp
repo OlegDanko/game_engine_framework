@@ -18,27 +18,26 @@ struct IEventTicketCourier : IEventTicketRecvRegistry {
     virtual ~IEventTicketCourier() = default;
 };
 
-struct EventSourceBase {
-    size_t id;
-    IEventTicketCourier& courier;
-    EventSourceBase(size_t id, IEventTicketCourier& c)
-        : id(id)
-        , courier(c) {}
-    virtual ~EventSourceBase() = default;
-};
-
 template<typename ...Ts>
 struct IEventApplier {
-    virtual void apply(size_t event_id, std::function<void(Ts&...)> fn) = 0;
+    virtual void apply(IEventTicket& ticket, std::function<void(Ts&...)> fn) = 0;
     virtual IEventTicketRecvRegistry& get_receiver_registry() = 0;
     virtual ~IEventApplier() = default;
 };
 
 template<typename ...Ts>
-struct EventSource : EventSourceBase, ITicketClosedListener, IEventApplier<Ts...> {
+struct EventSource : ITicketClosedListener, IEventApplier<Ts...> {
     std::unordered_map<size_t, std::tuple<Ts...>> events;
+    size_t id;
+    IEventTicketCourier& courier;
 
-    EventSource(size_t id, IEventTicketCourier& c) : EventSourceBase(id, c) {}
+    const ITicketClosedListener* as_ticket_closed_listener() const {
+        return this;
+    }
+
+    EventSource(size_t id, IEventTicketCourier& c)
+        : id(id)
+        , courier(c) {}
 
     void create(const Ts&...args) {
         static size_t ticket_id = 0;
@@ -52,8 +51,11 @@ struct EventSource : EventSourceBase, ITicketClosedListener, IEventApplier<Ts...
         }
     }
 
-    void apply(size_t event_id, std::function<void(Ts&...)> fn) override {
-        if(auto it = events.find(event_id); events.end() != it) {
+    void apply(IEventTicket& ticket, std::function<void(Ts&...)> fn) override {
+        if(ticket.get_listener_ptr() != as_ticket_closed_listener())
+            return;
+
+        if(auto it = events.find(ticket.get_id()); events.end() != it) {
             std::apply(fn, it->second);
         }
     }
