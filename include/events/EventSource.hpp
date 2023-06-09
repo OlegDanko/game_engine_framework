@@ -1,26 +1,11 @@
 #pragma once
 
+#include "IEventApplier.hpp"
+#include "IEventTicketCourier.hpp"
 #include "EventTicket.hpp"
 
 #include <unordered_map>
 #include <functional>
-#include <memory>
-
-struct IEventTicketReceiver;
-
-struct IEventTicketCourier {
-    virtual void register_receiver(size_t src_id, IEventTicketReceiver* recv) = 0;
-    virtual void on_ticket(size_t src_id, std::shared_ptr<IEventTicket> ticket) = 0;
-    virtual ~IEventTicketCourier() = default;
-};
-
-template<typename ...Ts>
-struct IEventApplier {
-    virtual size_t get_id() const = 0;
-    virtual void apply(IEventTicket& ticket, std::function<void(const Ts&...)> fn) = 0;
-    virtual void register_receiver(IEventTicketReceiver*) = 0;
-    virtual ~IEventApplier() = default;
-};
 
 template<typename ...Ts>
 struct EventSource : ITicketClosedListener, IEventApplier<Ts...> {

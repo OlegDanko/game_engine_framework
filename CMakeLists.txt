@@ -7,7 +7,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)
 
+file(GLOB SRC
+    include/events/EventTicket.cpp
+    include/events/EventReceiver.cpp
+    include/events/EventTicketCourier.cpp
+)
+
+add_library(game_engine_lib STATIC ${SRC})
 add_executable(game_engine main.cpp)
+target_link_libraries(game_engine game_engine_lib)
 
 target_include_directories(game_engine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 

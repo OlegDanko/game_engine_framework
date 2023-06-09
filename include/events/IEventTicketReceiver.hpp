@@ -1,8 +1,8 @@
 #pragma once
 
-#include "EventTicket.hpp"
-
 #include <memory>
+
+struct IEventTicket;
 
 struct IEventTicketFrame {
     virtual void add_ticket(size_t src_id, std::shared_ptr<IEventTicket> ticket) = 0;

@@ -1,5 +1,7 @@
 #include <boost/test/unit_test.hpp>
 #include <events/EventTicketCourier.hpp>
+#include <events/IEventTicket.hpp>
+#include <events/IEventTicketReceiver.hpp>
 
 #include <fakeit.hpp>
 
