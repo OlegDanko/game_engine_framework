@@ -5,7 +5,6 @@
 #include <events/EventTicketCourier.hpp>
 
 template<typename ...Ts>
-template<typename ...Us>
 struct GameState_defs<Ts...>::GameStateGenNotifier {
 //struct GameStateGenNotifier {
     template<typename T>
@@ -36,11 +35,11 @@ struct GameState_defs<Ts...>::GameStateGenNotifier {
 };
 
 template<typename ...Ts>
-template<template<typename ...> typename GEN_NOTIFIER>
+template<typename GEN_NOTIFIER>
 struct GameState_defs<Ts...>::GameStateGenerator {
     queues_t& queues;
 
-    using Notifier_t = GEN_NOTIFIER<Ts...>;
+    using Notifier_t = GEN_NOTIFIER;
     Notifier_t notifier;
 
     struct Frame {

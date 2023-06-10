@@ -24,6 +24,8 @@ add_executable(game_engine_tests main.cpp ${TEST_SRC})
 target_link_libraries(game_engine_tests game_engine_lib Boost::unit_test_framework)
 target_compile_options(game_engine_tests PRIVATE -Wall -Wextra -Wpedantic -Werror)
 
-target_include_directories(game_engine_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(game_engine_tests PRIVATE ${CMAKE_SOURCE_DIR}/deps/FakeIt/single_header/boost)
-target_include_directories(game_engine_tests PRIVATE ${CMAKE_SOURCE_DIR}/include/)
+target_include_directories(game_engine_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/deps/FakeIt/single_header/boost
+    ${CMAKE_SOURCE_DIR}/include/
+)

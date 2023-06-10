@@ -21,9 +21,8 @@ struct GameState_defs {
     using read_frame_t = typename queue_t<T>::ReadFrame;
 
     // Generator
-    template<typename ...>
     struct GameStateGenNotifier;
-    template<template<typename ...> typename = GameStateGenNotifier>
+    template<typename = GameStateGenNotifier>
     struct GameStateGenerator;
     template<typename, typename>
     struct GameStateAccess;

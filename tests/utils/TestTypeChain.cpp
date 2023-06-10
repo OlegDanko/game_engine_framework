@@ -59,8 +59,6 @@ BOOST_AUTO_TEST_CASE(TmplTypeChain_make_ref) {
     BOOST_CHECK_EQUAL(2, *get<int>(chain_1));
     BOOST_CHECK_EQUAL(20.0f, *get<float>(chain_1));
     BOOST_CHECK_EQUAL(200.0, *get<double>(chain_1));
-
-
 }
 
 BOOST_AUTO_TEST_SUITE_END()
