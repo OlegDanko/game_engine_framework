@@ -46,7 +46,6 @@ BOOST_AUTO_TEST_CASE(TmplTypeChain_make_obj) {
 }
 
 BOOST_AUTO_TEST_CASE(TmplTypeChain_make_ref) {
-
     auto int_u_ptr_0 = std::make_unique<int>(1);
     auto chain_0 = make_tmpl_type_chain<u_ptr_ref>(int_u_ptr_0);
     BOOST_CHECK_EQUAL(1, *get<int>(chain_0));
@@ -57,6 +56,10 @@ BOOST_AUTO_TEST_CASE(TmplTypeChain_make_ref) {
     auto chain_1 = make_tmpl_type_chain<u_ptr_ref>(int_u_ptr,
                                                    float_u_ptr,
                                                    double_u_ptr);
+    BOOST_CHECK_EQUAL(2, *get<int>(chain_1));
+    BOOST_CHECK_EQUAL(20.0f, *get<float>(chain_1));
+    BOOST_CHECK_EQUAL(200.0, *get<double>(chain_1));
+
 
 }
 

@@ -41,9 +41,9 @@ BOOST_AUTO_TEST_CASE(EventTicketCourier_case) {
     courier.on_ticket(1, t_3);
     courier.dispatch();
 
-    Verify(Method(frame, add_ticket).Using(1, t_1)).Never();
-    Verify(Method(frame, add_ticket).Using(1, t_2)).Never();
-    Verify(Method(frame, add_ticket).Using(1, t_3)).Once();
+    Verify(Method(frame, add_ticket).Using((size_t)1, t_1)).Never();
+    Verify(Method(frame, add_ticket).Using((size_t)1, t_2)).Never();
+    Verify(Method(frame, add_ticket).Using((size_t)1, t_3)).Once();
 
     frame.Reset();
 }
@@ -65,11 +65,6 @@ BOOST_AUTO_TEST_CASE(EventTicketCourier_multipleSendRecv) {
         return std::unique_ptr<IEventTicketFrame>{&frame_2.get()};
     });
 
-    auto init_ticket = [](Mock<IEventTicket>& mock, size_t id) {
-        Fake(Dtor(mock));
-        When(Method(mock, get_id)).AlwaysReturn(id);
-        return std::shared_ptr<IEventTicket>(&mock.get());
-    };
     Mock<IEventTicket> tm_1, tm_2, tm_3;
     auto t_1 = shared_from_ticket_mock(tm_1);
     auto t_2 = shared_from_ticket_mock(tm_2);
@@ -89,13 +84,13 @@ BOOST_AUTO_TEST_CASE(EventTicketCourier_multipleSendRecv) {
     courier.on_ticket(3, t_3);
     courier.dispatch();
 
-    Verify(Method(frame_1, add_ticket).Using(1, t_1)).Once();
-    Verify(Method(frame_1, add_ticket).Using(2, t_2)).Once();
-    Verify(Method(frame_1, add_ticket).Using(3, t_3)).Never();
+    Verify(Method(frame_1, add_ticket).Using((size_t)1, t_1)).Once();
+    Verify(Method(frame_1, add_ticket).Using((size_t)2, t_2)).Once();
+    Verify(Method(frame_1, add_ticket).Using((size_t)3, t_3)).Never();
 
-    Verify(Method(frame_2, add_ticket).Using(1, t_1)).Never();
-    Verify(Method(frame_2, add_ticket).Using(2, t_2)).Once();
-    Verify(Method(frame_2, add_ticket).Using(3, t_3)).Once();
+    Verify(Method(frame_2, add_ticket).Using((size_t)1, t_1)).Never();
+    Verify(Method(frame_2, add_ticket).Using((size_t)2, t_2)).Once();
+    Verify(Method(frame_2, add_ticket).Using((size_t)3, t_3)).Once();
 
     frame_1.Reset();
     frame_2.Reset();

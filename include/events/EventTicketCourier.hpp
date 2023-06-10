@@ -16,5 +16,5 @@ public:
     void register_receiver(size_t src_id, IEventTicketReceiver* recv) override;
 
     void on_ticket(size_t src_id, std::shared_ptr<IEventTicket> ticket) override;
-    void dispatch();
+    void dispatch() override;
 };

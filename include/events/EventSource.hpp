@@ -8,7 +8,7 @@
 #include <functional>
 
 template<typename ...Ts>
-class EventSource : public ITicketClosedListener, IEventApplier<Ts...> {
+class EventSource : public ITicketClosedListener, public IEventApplier<Ts...> {
     std::unordered_map<size_t, std::tuple<Ts...>> events;
     size_t id;
     IEventTicketCourier& courier;

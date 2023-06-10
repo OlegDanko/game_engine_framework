@@ -9,9 +9,8 @@ struct AttributeStateFrame {
 
     size_t frame_id{0};
     // holds attributes created or updated during the current frame
-    std::unordered_map<size_t, attr_holder_t> attr_holder_map;
-    std::unordered_map<size_t, attr_ptr_t> attr_ptr_map;
-
+    std::unordered_map<size_t, attr_holder_t> attr_holder_map{};
+    std::unordered_map<size_t, attr_ptr_t> attr_ptr_map{};
 
     static AttributeStateFrame spawn(const AttributeStateFrame& src) {
         AttributeStateFrame frame{.frame_id = src.frame_id + 1};

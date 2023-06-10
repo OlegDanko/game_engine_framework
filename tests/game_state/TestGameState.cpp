@@ -1,10 +1,14 @@
 #include <boost/test/unit_test.hpp>
 #include <game_state/GameState.hpp>
 
+#include <fakeit.hpp>
+using namespace fakeit;
+
 BOOST_AUTO_TEST_SUITE(GameStateTests)
 
 template<typename T>
 using gen_frame_t = typename AttributeStateQueue_DefGen<T>::GenFrame;
+
 
 BOOST_AUTO_TEST_CASE(GameState_case) {
     GameState_defs<int, float, double>::GameState game_state;
@@ -53,6 +57,8 @@ BOOST_AUTO_TEST_CASE(GameState_case) {
 BOOST_AUTO_TEST_CASE(GameStateAccess_single_attr) {
     GameState_defs<int, float, double>::GameState game_state;
     size_t id;
+
+    game_state.generator.get_gen_event_source<int>();
     if(auto frame = game_state.generator.get_frame(); true) {
         auto go = frame.gen_game_object<int>();
         id = go.get_id();

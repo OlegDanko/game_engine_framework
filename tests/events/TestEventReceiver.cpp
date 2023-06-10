@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(EventReceiver_case) {
     EventReceiver recv;
 
     std::function<void(const int&, const float&)> callback =
-        [](const int& i_, const float& f_) {};
+        [](const int&, const float&) {};
 
     auto frame = recv.get_frame();
     frame->add_ticket(1, ticket_s_ptr);
@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE(EventReceiver_mutiple_appliers) {
     EventReceiver recv;
 
     using cb_t = std::function<void(const int&, const float&)>;
-    cb_t callback = [](const int& i_, const float& f_) {};
+    cb_t callback = [](const int&, const float&) {};
 
     recv.register_callback(event_applier_1.get(), callback);
     recv.register_callback(event_applier_2.get(), callback);

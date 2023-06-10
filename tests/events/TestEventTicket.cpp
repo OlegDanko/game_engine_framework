@@ -21,11 +21,11 @@ BOOST_AUTO_TEST_CASE(EventTicket_case) {
     Verify(Method(listener, on_ticket_closed)).Never();
 
     ticket_1 = nullptr;
-    Verify(Method(listener, on_ticket_closed).Using(1)).Once();
-    Verify(Method(listener, on_ticket_closed).Using(2)).Never();
+    Verify(Method(listener, on_ticket_closed).Using((size_t)1)).Once();
+    Verify(Method(listener, on_ticket_closed).Using((size_t)2)).Never();
 
     ticket_2 = nullptr;
-    Verify(Method(listener, on_ticket_closed).Using(2)).Once();
+    Verify(Method(listener, on_ticket_closed).Using((size_t)2)).Once();
 }
 
 BOOST_AUTO_TEST_SUITE_END()

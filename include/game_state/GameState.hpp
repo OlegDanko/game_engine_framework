@@ -6,7 +6,7 @@
 template<typename ...Ts>
 struct GameState_defs<Ts...>::GameState {
     queues_t attribute_queues;
-    GameStateGenerator generator{attribute_queues};
+    GameStateGenerator<GameStateGenNotifier> generator{attribute_queues};
 
     template<typename ...Us>
     queue_refs_chain_t<Us...> get_queues() {

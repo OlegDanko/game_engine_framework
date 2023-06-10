@@ -16,7 +16,6 @@ struct flattener<TestInt> {
 BOOST_AUTO_TEST_SUITE(FlatteningLifoQueueTests)
 
 BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push) {
-    std::hash<std::string> h;
     FlatteningLifoQueue<TestInt> queue;
     queue.push({1});
     BOOST_CHECK_EQUAL(queue.observe().get().val, 1);
@@ -25,7 +24,6 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push) {
 }
 
 BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_several) {
-    std::hash<std::string> h;
     FlatteningLifoQueue<TestInt> queue;
     queue.push({1});
     queue.push({3});
@@ -33,7 +31,6 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_several) {
 }
 
 BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_two) {
-    std::hash<std::string> h;
     FlatteningLifoQueue<TestInt> queue;
     queue.push({1});
     if(auto obs_0 = queue.observe(); true) {
@@ -44,7 +41,6 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_two) {
 }
 
 BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_multiple_observers) {
-    std::hash<std::string> h;
     FlatteningLifoQueue<TestInt> queue;
     queue.push({1});
     auto obs_a_opt = std::make_optional(queue.observe());
@@ -59,7 +55,6 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_multiple_observers) {
 }
 
 BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_move_observer) {
-    std::hash<std::string> h;
     FlatteningLifoQueue<TestInt> queue;
     queue.push({1});
     auto obs_a_opt = std::make_optional(queue.observe());
@@ -74,7 +69,6 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_move_observer) {
 
 
 BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_three) {
-    std::hash<std::string> h;
     FlatteningLifoQueue<TestInt> queue;
     queue.push({1});
     queue.push({3});
@@ -84,7 +78,6 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_three) {
 }
 
 BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_2_of_3) {
-    std::hash<std::string> h;
     FlatteningLifoQueue<TestInt> queue;
     queue.push({1});
     queue.push({3});
@@ -97,7 +90,6 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_2_of_3) {
 }
 
 BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_2_of_3_last) {
-    std::hash<std::string> h;
     FlatteningLifoQueue<TestInt> queue;
     queue.push({1});
     auto obs_0_opt = std::make_optional(queue.observe());
@@ -113,7 +105,6 @@ BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_2_of_3_last) {
 }
 
 BOOST_AUTO_TEST_CASE(FlatteningLifoQueue_push_observe_1_of_3_last) {
-    std::hash<std::string> h;
     FlatteningLifoQueue<TestInt> queue;
     queue.push({1});
     auto obs_0_opt = std::make_optional(queue.observe());

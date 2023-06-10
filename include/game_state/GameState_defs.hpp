@@ -8,9 +8,7 @@ template<typename ...Ts>
 struct GameState_defs {
     template<typename T>
     using queue_t = AttributeStateQueue_DefGen<T>;
-    template<typename ...Us>
-    using queues_tmpl = tmpl_type_chain<queue_t, Us...>;
-    using queues_t = queues_tmpl<Ts...>;
+    using queues_t = tmpl_type_chain<queue_t, Ts...>;
     template<typename T>
     using queue_ref_t = queue_t<T>&;
     template<typename ...Us>
@@ -23,6 +21,9 @@ struct GameState_defs {
     using read_frame_t = typename queue_t<T>::ReadFrame;
 
     // Generator
+    template<typename ...>
+    struct GameStateGenNotifier;
+    template<template<typename ...> typename = GameStateGenNotifier>
     struct GameStateGenerator;
     template<typename, typename>
     struct GameStateAccess;
