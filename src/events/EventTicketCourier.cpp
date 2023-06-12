@@ -1,5 +1,5 @@
-#include "EventTicketCourier.hpp"
-#include "IEventTicketReceiver.hpp"
+#include <events/EventTicketCourier.hpp>
+#include <events/IEventTicketReceiver.hpp>
 
 void EventTicketCourier::register_receiver(size_t src_id, IEventTicketReceiver *recv) {
     receivers.insert(recv);

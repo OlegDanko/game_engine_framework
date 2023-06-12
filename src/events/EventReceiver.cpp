@@ -1,4 +1,4 @@
-#include "EventReceiver.hpp"
+#include <events/EventReceiver.hpp>
 #include <utility>
 
 void EventReceiver::add_tickets(ticket_queue_t tickets) {

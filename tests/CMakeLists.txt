@@ -29,5 +29,5 @@ target_compile_options(game_engine_tests PRIVATE -Wall -Wextra -Wpedantic -Werro
 target_include_directories(game_engine_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/deps/FakeIt/single_header/boost
-    ${CMAKE_SOURCE_DIR}/include/
+    ${CMAKE_SOURCE_DIR}/include
 )

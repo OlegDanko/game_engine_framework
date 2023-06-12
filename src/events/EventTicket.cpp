@@ -1,4 +1,4 @@
-#include "EventTicket.hpp"
+#include <events/EventTicket.hpp>
 
 EventTicket::EventTicket(std::size_t id, ITicketClosedListener &listener)
     : id(id)
