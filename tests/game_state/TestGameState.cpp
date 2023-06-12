@@ -1,7 +1,11 @@
 #include <boost/test/unit_test.hpp>
+#include <game_state/GameStateGenNotifier.hpp>
+#include <game_state/GameStateGenerator.hpp>
+#include <game_state/GameStateAccess.hpp>
 #include <game_state/GameState.hpp>
 
 #include <fakeit.hpp>
+
 using namespace fakeit;
 
 BOOST_AUTO_TEST_SUITE(GameStateTests)

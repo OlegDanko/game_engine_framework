@@ -94,4 +94,18 @@ tmpl_type_chain<TT, Ts...> make_tmpl_type_chain(TT<Ts>&& ... vals) {
     return tmpl_type_chain_maker<TT, Ts...>::make(std::forward<TT<Ts>>(vals)...);
 }
 
+template<typename CHAIN, typename T>
+struct chain_contains;
+
+template<typename T, typename ...Ts>
+struct chain_contains<type_chain<Ts...>, T>{
+    constexpr static bool val = is_type_present_v<T, Ts...>;
+};
+template<typename T, template<typename> typename TT, typename ...Ts>
+struct chain_contains<tmpl_type_chain<TT, Ts...>, T>{
+    constexpr static bool val = is_type_present_v<T, Ts...>;
+};
+
+template<typename CHAIN, typename T>
+constexpr bool chain_contains_v = chain_contains<CHAIN, T>::val;
 

@@ -16,6 +16,9 @@ struct GameState_defs<Ts...>::GameStateAccess<types<Ms...>, types<Rs...>> {
         : mod_queues(std::move(mqs))
         , read_queues(std::move(rqs)) {}
 
+    GameStateAccess(GameState_defs<Ts...>::GameState& gs)
+        : GameStateAccess(std::move(gs.template get_access<types<Ms...>, types<Rs...>>())) {}
+
     struct Frame {
         mod_frames_t mod_frames;
         read_frames_t read_frames;
@@ -30,9 +33,26 @@ struct GameState_defs<Ts...>::GameStateAccess<types<Ms...>, types<Rs...>> {
             T* get_attr() {
                 return get<T>(frames.mod_frames).get_attr(id);
             }
+
+            template<typename... Us>
+            std::tuple<Us*...> get_attrs() {
+                return {get_attr<Us>()...};
+            }
+
             template<typename T>
-            const T* read_attr() const {
+            std::enable_if_t<chain_contains_v<mod_queues_t, T>, const T*>
+            read_attr() const {
+                return get<T>(frames.mod_frames).read_attr(id);
+            }
+            template<typename T>
+            std::enable_if_t<chain_contains_v<read_queues_t, T>, const T*>
+            read_attr() const {
                 return get<T>(frames.read_frames).read_attr(id);
+            }
+
+            template<typename... Us>
+            std::tuple<const Us*...> read_attrs() {
+                return {read_attr<Us>()...};
             }
         };
         GameStateObject get_game_object(size_t id) {

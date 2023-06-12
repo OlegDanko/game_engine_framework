@@ -22,9 +22,11 @@ struct GameState_defs {
 
     // Generator
     struct GameStateGenNotifier;
-    template<typename = GameStateGenNotifier>
     struct GameStateGenerator;
     template<typename, typename>
     struct GameStateAccess;
     struct GameState;
+
+    template<typename, typename>
+    class AttributeProcessorBase;
 };

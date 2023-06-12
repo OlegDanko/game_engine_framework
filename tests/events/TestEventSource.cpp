@@ -12,12 +12,12 @@ BOOST_AUTO_TEST_CASE(EventSource_case) {
     Mock<IEventTicketCourier> courier_mock;
     Mock<IEventTicket> ticket_mock;
 
-    EventSource<int, double> src(123, courier_mock.get());
+    EventSource<int, double> src(courier_mock.get());
 
     // Save the ticket when an event is created
     std::shared_ptr<IEventTicket> ticket;
     When(Method(courier_mock, on_ticket)).Do([&](auto src_id, auto t){
-        BOOST_CHECK_EQUAL(src_id, 123);
+        BOOST_CHECK_EQUAL(src_id, src.get_id());
         ticket = std::move(t);
     });
 

@@ -23,36 +23,42 @@ BOOST_AUTO_TEST_CASE(AttributeStateFrame_double_gen) {
 
 BOOST_AUTO_TEST_CASE(AttributeStateFrame_gen_get_read_attr) {
     struct TestAttr { int var{0}; };
-    AttributeStateFrame_DefGen<TestAttr> frame;
+    using frame_t = AttributeStateFrame_DefGen<TestAttr>;
+    frame_t frame;
+
+    BOOST_CHECK(frame.get_attr(1) == nullptr);
+    BOOST_CHECK(frame.read_attr(1) == nullptr);
 
     frame.gen_attr(1)->var = 1;
 
-    BOOST_CHECK(frame.get_attr(1) != nullptr);
-    BOOST_CHECK(frame.read_attr(1) != nullptr);
-    BOOST_CHECK_EQUAL(frame.get_attr(1)->var, 1);
-    BOOST_CHECK_EQUAL(frame.read_attr(1)->var, 1);
+    auto frame_2 = frame_t::spawn(frame);
 
-    frame.get_attr(1)->var = 2;
+    BOOST_CHECK_EQUAL(frame_2.read_attr(1)->var, 1);
+    BOOST_CHECK_EQUAL(frame_2.get_attr(1)->var, 1);
 
-    BOOST_CHECK_EQUAL(frame.get_attr(1)->var, 2);
-    BOOST_CHECK_EQUAL(frame.read_attr(1)->var, 2);
 }
 
 BOOST_AUTO_TEST_CASE(AttributeStateFrame_multiple_attrs) {
     struct TestAttr { int var{0}; };
-    AttributeStateFrame_DefGen<TestAttr> frame;
+    using frame_t = AttributeStateFrame_DefGen<TestAttr>;
+    frame_t frame;
+
+    BOOST_CHECK_EQUAL(frame.get_attr(1), nullptr);
+    BOOST_CHECK_EQUAL(frame.get_attr(2), nullptr);
 
     frame.gen_attr(1)->var = 1;
     frame.gen_attr(2)->var = 2;
 
-    BOOST_CHECK(frame.get_attr(1) != nullptr);
-    BOOST_CHECK(frame.get_attr(2) != nullptr);
-    BOOST_CHECK(frame.read_attr(1) != nullptr);
-    BOOST_CHECK(frame.read_attr(2) != nullptr);
+    BOOST_CHECK_EQUAL(frame.read_attr(1), nullptr);
+    BOOST_CHECK_EQUAL(frame.read_attr(2), nullptr);
     BOOST_CHECK_EQUAL(frame.get_attr(1)->var, 1);
     BOOST_CHECK_EQUAL(frame.get_attr(2)->var, 2);
-    BOOST_CHECK_EQUAL(frame.read_attr(1)->var, 1);
-    BOOST_CHECK_EQUAL(frame.read_attr(2)->var, 2);
+
+    auto frame_2 = frame_t::spawn(frame);
+    BOOST_CHECK_EQUAL(frame_2.read_attr(1)->var, 1);
+    BOOST_CHECK_EQUAL(frame_2.read_attr(2)->var, 2);
+    BOOST_CHECK_EQUAL(frame_2.get_attr(1)->var, 1);
+    BOOST_CHECK_EQUAL(frame_2.get_attr(2)->var, 2);
 }
 
 BOOST_AUTO_TEST_CASE(AttributeStateFrame_get_attr_const_cast) {
@@ -62,7 +68,7 @@ BOOST_AUTO_TEST_CASE(AttributeStateFrame_get_attr_const_cast) {
     frame.gen_attr(1)->var = 1;
 
     const auto& frame_const = frame;
-    BOOST_CHECK_EQUAL(frame_const.read_attr(1)->var, 1);
+    BOOST_CHECK_EQUAL(frame_const.get_attr(1)->var, 1);
 }
 
 BOOST_AUTO_TEST_CASE(AttributeStateFrame_get_attr_const_cast_nullptr) {

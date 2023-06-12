@@ -7,6 +7,9 @@
 #include <unordered_map>
 #include <functional>
 
+
+size_t next_event_id();
+
 template<typename ...Ts>
 class EventSource : public ITicketClosedListener, public IEventApplier<Ts...> {
     std::unordered_map<size_t, std::tuple<Ts...>> events;
@@ -17,8 +20,8 @@ class EventSource : public ITicketClosedListener, public IEventApplier<Ts...> {
         return this;
     }
 public:
-    EventSource(size_t id, IEventTicketCourier& c)
-        : id(id)
+    EventSource(IEventTicketCourier& c)
+        : id(next_event_id())
         , courier(c) {}
 
     void create(const Ts&...args) {
@@ -49,10 +52,3 @@ public:
         courier.register_receiver(id, recv);
     }
 };
-
-size_t next_event_id();
-
-template<typename ...Ts>
-EventSource<Ts...> make_event_source(IEventTicketCourier& c) {
-    return {next_event_id(), c};
-}

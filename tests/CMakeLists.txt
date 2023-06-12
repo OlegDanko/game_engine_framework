@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(game_engine_tests LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 file(GLOB TEST_SRC
@@ -11,6 +11,8 @@ file(GLOB TEST_SRC
     game_state/TestAttributeStateQueue.cpp
     game_state/TestGameState.cpp
     game_state/TestGameStateGenerator.cpp
+    game_state/TestGameStateGenNotifier.cpp
+    game_state/TestAttributeProcessorBase.cpp
     utils/TestTypeChain.cpp
     utils/TestTypeUtils.cpp
     events/TestEventTicket.cpp

@@ -61,6 +61,9 @@ struct AttributeStateQueue {
         attr_ptr_t get_attr(size_t id) {
             return frame_lkd.get().get_attr(id);
         }
+        attr_ptr_t read_attr(size_t id) {
+            return frame_lkd.get().get_attr(id);
+        }
         ModFrame(AttributeStateQueue& parent, locked_frame_t frame_lkd)
             : parent(parent)
             , frame_lkd(std::move(frame_lkd)) {}
@@ -78,8 +81,11 @@ struct AttributeStateQueue {
             : frame_obs(std::move(frame_obs)) {}
         ReadFrame(ReadFrame&&) = default;
         const attr_ptr_t read_attr(size_t id) const {
-            get_id();
-            return frame_obs.get().read_attr(id);
+            auto& f = frame_obs.get();
+            if(auto ptr = f.get_attr(id); ptr)
+                return ptr;
+
+            return f.read_attr(id);
         }
     };
 

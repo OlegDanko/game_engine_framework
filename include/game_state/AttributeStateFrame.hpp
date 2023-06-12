@@ -7,10 +7,10 @@ struct AttributeStateFrame {
     using attr_holder_t = typename ATTR_GEN_T::attr_holder_t;
     using attr_ptr_t = typename ATTR_GEN_T::attr_ptr_t;
 
-    size_t frame_id{0};
+    std::size_t frame_id{0};
     // holds attributes created or updated during the current frame
-    std::unordered_map<size_t, attr_holder_t> attr_holder_map{};
-    std::unordered_map<size_t, attr_ptr_t> attr_ptr_map{};
+    std::unordered_map<std::size_t, attr_holder_t> attr_holder_map{};
+    std::unordered_map<std::size_t, attr_ptr_t> attr_ptr_map{};
 
     static AttributeStateFrame spawn(const AttributeStateFrame& src) {
         AttributeStateFrame frame{.frame_id = src.frame_id + 1};
@@ -36,7 +36,7 @@ struct AttributeStateFrame {
         }
     }
 
-    attr_ptr_t gen_attr(size_t id) {
+    attr_ptr_t gen_attr(std::size_t id) {
         if(attr_holder_map.find(id) != attr_holder_map.end()
             || attr_ptr_map.find(id) != attr_ptr_map.end()) {
             return nullptr;
@@ -46,7 +46,7 @@ struct AttributeStateFrame {
         return attr_holder_map[id].get();
     }
 
-    attr_ptr_t get_attr(size_t id) {
+    attr_ptr_t get_attr(std::size_t id) {
         if(auto it = attr_holder_map.find(id); attr_holder_map.end() != it) {
             return it->second.get();
         }
@@ -56,19 +56,26 @@ struct AttributeStateFrame {
             return nullptr;
         }
         attr_holder_map[id] = ATTR_GEN_T::cpy_attribure(it->second);
-        attr_ptr_map.erase(it);
 
         return attr_holder_map[id].get();
     }
-    const attr_ptr_t read_attr(size_t id) const {
+
+    const attr_ptr_t get_attr(std::size_t id) const {
         if(auto it = attr_holder_map.find(id); attr_holder_map.end() != it) {
             return it->second.get();
         }
+        return nullptr;
+    }
+
+    const attr_ptr_t read_attr(std::size_t id) const {
+//        if(auto it = attr_holder_map.find(id); attr_holder_map.end() != it) {
+//            return it->second.get();
+//        }
         if(auto it = attr_ptr_map.find(id); attr_ptr_map.end() != it) {
             return it->second;
         }
         return nullptr;
     }
 
-    size_t get_id() const { return frame_id; }
+    std::size_t get_id() const { return frame_id; }
 };
