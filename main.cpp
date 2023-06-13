@@ -1,6 +1,3 @@
-#include <array>
-#include <iostream>
-
 #include <game_state/AttributeProcessorBase.hpp>
 #include <game_state/GameStateGenNotifier.hpp>
 #include <game_state/GameStateGenerator.hpp>
@@ -10,6 +7,8 @@
 #include <events/EventReceiver.hpp>
 #include <game_state/GameState.hpp>
 
+#include <array>
+#include <iostream>
 #include <optional>
 #include <ranges>
 #include <thread>
@@ -64,7 +63,6 @@ struct ids_pair {
     bool operator==(const ids_pair& that) const {
         return lo == that.lo && hi == that.hi;
     }
-
 };
 
 template<>
@@ -79,7 +77,6 @@ struct std::hash<ids_pair> {
         return u.s + p.hi;
     }
 };
-
 
 class CollisionProcessor : public AttributeProcessorBase<types<>, types<Position, Hitbox>> {
     std::vector<size_t> hb_ids;
