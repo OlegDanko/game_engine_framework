@@ -16,7 +16,7 @@ file(GLOB SRC
 
 add_library(engine_framework_lib STATIC ${SRC})
 target_include_directories(engine_framework_lib PRIVATE
-    ${CMAKE_SOURCE_DIR}/include/
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/
 )
 target_compile_options(engine_framework_lib PRIVATE
     -Wall
@@ -31,7 +31,8 @@ target_link_libraries(engine_framework
 )
 
 target_include_directories(engine_framework PRIVATE
-    ${CMAKE_SOURCE_DIR}/include/
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/
+    ${CMAKE_CURRENT_SOURCE_DIR}/deps/FakeIt/single_header/boost/
 )
 
 install(TARGETS engine_framework_lib engine_framework
