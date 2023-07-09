@@ -1,6 +1,3 @@
-[submodule "deps/FakeIt"]
-	path = deps/FakeIt
-	url = https://github.com/eranpeer/FakeIt.git
-[submodule "engine_framework/test/deps/FakeIt"]
-	path = engine_framework/test/deps/FakeIt
+[submodule "test/deps/FakeIt"]
+	path = test/deps/FakeIt
 	url = https://github.com/eranpeer/FakeIt.git

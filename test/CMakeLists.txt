@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(game_engine_tests LANGUAGES CXX)
+project(engine_framework_tests LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -22,11 +22,11 @@ file(GLOB TEST_SRC
 )
 
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
-add_executable(game_engine_tests main.cpp ${TEST_SRC})
-target_link_libraries(game_engine_tests game_engine_framework_lib Boost::unit_test_framework)
-target_compile_options(game_engine_tests PRIVATE -Wall -Wextra -Wpedantic -Werror)
+add_executable(engine_framework_tests main.cpp ${TEST_SRC})
+target_link_libraries(engine_framework_tests engine_framework_lib Boost::unit_test_framework)
+target_compile_options(engine_framework_tests PRIVATE -Wall -Wextra -Wpedantic -Werror)
 
-target_include_directories(game_engine_tests PRIVATE
+target_include_directories(engine_framework_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/deps/FakeIt/single_header/boost
     ${CMAKE_CURRENT_SOURCE_DIR}/../include/
 
