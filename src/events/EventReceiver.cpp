@@ -1,7 +1,10 @@
 #include <events/EventReceiver.hpp>
+#include <events/IEventTicket.hpp>
+#include <iostream>
 #include <utility>
 
 void EventReceiver::add_tickets(ticket_queue_t tickets) {
+    std::lock_guard lk(qq_mtx);
     tickets_qq.push(std::move(tickets));
 }
 
@@ -25,7 +28,9 @@ void EventReceiver::serve_ticket_queue(ticket_queue_t &ticket_queue) {
 }
 
 void EventReceiver::serve_events() {
-    auto ticket_queues = std::exchange(tickets_qq, {});
+    decltype(tickets_qq) ticket_queues{};
+    if(std::lock_guard lk(qq_mtx); true)
+        std::swap(tickets_qq, ticket_queues);
     while(!ticket_queues.empty()) {
         serve_ticket_queue(ticket_queues.front());
         ticket_queues.pop();

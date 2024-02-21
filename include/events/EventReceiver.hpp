@@ -5,14 +5,17 @@
 
 #include <queue>
 #include <unordered_map>
+#include <mutex>
 
 class EventReceiver : public IEventTicketReceiver {
     using ticket_sptr_t = std::shared_ptr<IEventTicket>;
     using src_ticket_pair_t = std::pair<size_t, ticket_sptr_t>;
     using ticket_queue_t = std::queue<src_ticket_pair_t>;
+    std::string name;
 
     std::unordered_map<size_t, std::vector<std::function<void(IEventTicket&)>>> callbacks_by_src;
     std::queue<ticket_queue_t> tickets_qq;
+    std::mutex qq_mtx;
 
     void add_tickets(ticket_queue_t tickets);
 
@@ -34,6 +37,7 @@ class EventReceiver : public IEventTicketReceiver {
     void serve_ticket_queue(ticket_queue_t& ticket_queue);
 
 public:
+    EventReceiver(const std::string& name = "") : name(name) {}
     template<typename ...Ts>
     void register_callback(IEventApplier<Ts...>& e, std::function<void(const Ts&...)> cb) {
         e.register_receiver(this);
